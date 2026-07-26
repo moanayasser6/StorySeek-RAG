@@ -15,14 +15,6 @@ st.set_page_config(
     layout="wide"
 )
 st.markdown("""
-<style>
-
-/* هنا كود الـ CSS بالكامل */
-
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
 <div class="title">
 📜 StorySeek
 </div>
@@ -31,13 +23,6 @@ st.markdown("""
 Searching Ancient Stories with Modern AI
 </div>
 """, unsafe_allow_html=True)
-search = st.button("Search")
-st.markdown(
-'</div>',
-unsafe_allow_html=True
-)
-
-
 # -----------------------
 # Paths
 # -----------------------

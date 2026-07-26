@@ -14,9 +14,29 @@ st.set_page_config(
     page_icon="📚",
     layout="wide"
 )
+st.markdown("""
+<style>
 
-st.title("📚 StorySeek")
-st.subheader("Searching Ancient Stories with Modern AI")
+/* هنا كود الـ CSS بالكامل */
+
+</style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class="title">
+📜 StorySeek
+</div>
+
+<div class="subtitle">
+Searching Ancient Stories with Modern AI
+</div>
+""", unsafe_allow_html=True)
+search = st.button("Search")
+st.markdown(
+'</div>',
+unsafe_allow_html=True
+)
+
 
 # -----------------------
 # Paths
@@ -126,6 +146,14 @@ if st.button("Search"):
 
             st.write(f"Score: {item['score']:.4f}")
 
-            st.write(item["chunk"])
+            st.markdown(f"""
+<div class="result-card">
+
+<h4>📖 Story Result</h4>
+
+<p>{item["chunk"]}</p>
+
+</div>
+""", unsafe_allow_html=True)
 
             st.divider()

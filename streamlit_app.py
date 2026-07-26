@@ -1,12 +1,8 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
-import faiss
-import joblib
-import torch
 
-from sentence_transformers import SentenceTransformer
-from transformers import AutoTokenizer, AutoModelForCausalLM
+# -------------------------------
+# Page Configuration
+# -------------------------------
 
 st.set_page_config(
     page_title="StorySeek",
@@ -14,9 +10,48 @@ st.set_page_config(
     layout="wide"
 )
 
-ARTIFACTS_PATH = "artifacts"
+# -------------------------------
+# Header
+# -------------------------------
 
-CHUNKS_PATH = f"{ARTIFACTS_PATH}/chunks.csv"
-EMBEDDINGS_PATH = f"{ARTIFACTS_PATH}/embeddings.npy"
-FAISS_PATH = f"{ARTIFACTS_PATH}/faiss_index.index"
-BM25_PATH = f"{ARTIFACTS_PATH}/bm25.pkl"
+st.title("📚 StorySeek")
+
+st.markdown(
+"""
+### Searching Ancient Stories with Modern AI
+
+Search Arabic stories using a Hybrid Retrieval-Augmented Generation (RAG) system
+powered by BM25, FAISS, Sentence Transformers, and Qwen.
+"""
+)
+
+st.divider()
+
+# -------------------------------
+# Search Box
+# -------------------------------
+
+query = st.text_input(
+    "Enter your question",
+    placeholder="مثال: قصة عن الشجاعة"
+)
+
+search = st.button("Search")
+
+st.divider()
+
+# -------------------------------
+# Results
+# -------------------------------
+
+if search:
+
+    if query.strip() == "":
+        st.warning("Please enter a question.")
+
+    else:
+        st.success("Search button works successfully!")
+
+        st.write("Your query:")
+
+        st.code(query)

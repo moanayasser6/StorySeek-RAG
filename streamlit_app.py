@@ -1,107 +1,57 @@
 import streamlit as st
 
-# -----------------------------
+# --------------------------------------------------
 # Page Configuration
-# -----------------------------
+# --------------------------------------------------
+
 st.set_page_config(
-    page_title="StorySeek-RAG",
+    page_title="StorySeek",
     page_icon="📚",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
 
-# -----------------------------
-# Sidebar
-# -----------------------------
-with st.sidebar:
-    st.title("📚 StorySeek-RAG")
+# --------------------------------------------------
+# Header
+# --------------------------------------------------
 
-    st.markdown("---")
+st.title("📚 StorySeek")
+st.subheader("Searching Ancient Stories with Modern AI")
 
-    st.markdown("### About")
-    st.write(
-        """
-        StorySeek-RAG is an AI-powered system that retrieves
-        Arabic short stories using Hybrid Search (BM25 + FAISS)
-        and generates answers with a Large Language Model.
-        """
-    )
-
-    st.markdown("---")
-
-    st.markdown("### Technologies")
-
-    st.markdown("""
-- BM25
-- FAISS
-- Sentence Transformers
-- Qwen LLM
-- Streamlit
-""")
-
-# -----------------------------
-# Main Page
-# -----------------------------
-st.title("📚 StorySeek-RAG")
-
-st.subheader(
-    "Searching Ancient Stories with Modern AI"
-)
-
-st.write(
+st.markdown(
     """
-Ask a question about Arabic short stories.
-The system will retrieve the most relevant story passages
-and generate an AI-powered answer.
+Search Arabic stories using a Hybrid Retrieval System
+combining BM25, FAISS, and Large Language Models.
 """
 )
 
 st.divider()
 
-# -----------------------------
-# User Question
-# -----------------------------
-question = st.text_area(
-    "Your Question",
-    placeholder="مثال: احكي لي قصة عن الشجاعة",
-    height=120
+# --------------------------------------------------
+# Search Area
+# --------------------------------------------------
+
+query = st.text_input(
+    "Enter your question:",
+    placeholder="Example: قصة عن الشجاعة"
 )
 
-search = st.button(
-    "🔍 Search",
-    use_container_width=True
-)
+search_button = st.button("Search")
 
 st.divider()
 
-# -----------------------------
+# --------------------------------------------------
 # Results Area
-# -----------------------------
-st.subheader("Retrieved Context")
+# --------------------------------------------------
 
-context_placeholder = st.empty()
+if search_button:
 
-st.subheader("AI Answer")
-
-answer_placeholder = st.empty()
-
-# -----------------------------
-# Temporary Behavior
-# -----------------------------
-if search:
-
-    if question.strip() == "":
-
+    if query.strip() == "":
         st.warning("Please enter a question.")
 
     else:
+        st.success("Search button works successfully!")
 
-        with st.spinner("Searching stories..."):
+        st.write("Your query:")
 
-            context_placeholder.info(
-                "Hybrid Search will be connected in the next step."
-            )
-
-            answer_placeholder.success(
-                "LLM response will appear here."
-            )
+        st.code(query)
+           

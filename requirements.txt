@@ -8,3 +8,5 @@ faiss-cpu
 streamlit
 scikit-learn
 tqdm
+joblib
+requests

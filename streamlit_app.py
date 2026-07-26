@@ -1,8 +1,13 @@
 import streamlit as st
+import pandas as pd
+import numpy as np
+import faiss
+import joblib
+from sentence_transformers import SentenceTransformer
 
-# -------------------------------
-# Page Configuration
-# -------------------------------
+# -----------------------
+# Page
+# -----------------------
 
 st.set_page_config(
     page_title="StorySeek",
@@ -10,48 +15,45 @@ st.set_page_config(
     layout="wide"
 )
 
-# -------------------------------
-# Header
-# -------------------------------
-
 st.title("📚 StorySeek")
+st.subheader("Searching Ancient Stories with Modern AI")
 
-st.markdown(
-"""
-### Searching Ancient Stories with Modern AI
+# -----------------------
+# Paths
+# -----------------------
 
-Search Arabic stories using a Hybrid Retrieval-Augmented Generation (RAG) system
-powered by BM25, FAISS, Sentence Transformers, and Qwen.
-"""
-)
+ARTIFACTS = "artifacts"
 
-st.divider()
+CHUNKS = f"{ARTIFACTS}/chunks.csv"
+EMBEDDINGS = f"{ARTIFACTS}/embeddings.npy"
+FAISS_INDEX = f"{ARTIFACTS}/faiss_index.index"
+BM25 = f"{ARTIFACTS}/bm25.pkl"
 
-# -------------------------------
-# Search Box
-# -------------------------------
+# -----------------------
+# Load Resources
+# -----------------------
 
-query = st.text_input(
-    "Enter your question",
-    placeholder="مثال: قصة عن الشجاعة"
-)
+@st.cache_resource
+def load_resources():
 
-search = st.button("Search")
+    chunks_df = pd.read_csv(CHUNKS)
 
-st.divider()
+    embeddings = np.load(EMBEDDINGS)
 
-# -------------------------------
-# Results
-# -------------------------------
+    faiss_index = faiss.read_index(FAISS_INDEX)
 
-if search:
+    bm25 = joblib.load(BM25)
 
-    if query.strip() == "":
-        st.warning("Please enter a question.")
+    embedding_model = SentenceTransformer(
+        "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    )
 
-    else:
-        st.success("Search button works successfully!")
+    return chunks_df, embeddings, faiss_index, bm25, embedding_model
 
-        st.write("Your query:")
+chunks_df, embeddings, faiss_index, bm25, embedding_model = load_resources()
 
-        st.code(query)
+st.success("✅ All project artifacts loaded successfully!")
+
+st.write("Chunks:", len(chunks_df))
+st.write("Embedding Shape:", embeddings.shape)
+st.write("FAISS Vectors:", faiss_index.ntotal)

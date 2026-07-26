@@ -1,0 +1,6 @@
+{
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "embedding_dimension": 384,
+    "number_of_chunks": 5089,
+    "number_of_stories": 5000
+}

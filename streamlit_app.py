@@ -430,6 +430,25 @@ st.markdown(f"""
 
 st.write("")
 
+def normalize_scores(scores):
+    """
+    Normalizes a list of scores to a 0-1 range using min-max normalization.
+
+    Parameters:
+        scores (list): list of raw scores
+
+    Returns:
+        list: normalized scores between 0 and 1
+    """
+    scores = np.array(scores, dtype=float)
+
+    # Avoid division by zero if all scores are the same
+    if scores.max() == scores.min():
+        return [1.0 for _ in scores]
+
+    normalized = (scores - scores.min()) / (scores.max() - scores.min())
+    return normalized.tolist()
+
 def hybrid_search(query, top_k=5, alpha=0.7):
 
     # -------- Dense Search (FAISS) --------
@@ -450,14 +469,18 @@ def hybrid_search(query, top_k=5, alpha=0.7):
 
     bm25_indices = np.argsort(bm25_scores)[::-1][:top_k]
 
+    # -------- Normalize scores before fusion --------
+    norm_faiss_scores = normalize_scores(faiss_scores[0])
+    norm_bm25_scores = normalize_scores([bm25_scores[idx] for idx in bm25_indices])
+
     # -------- Hybrid Fusion --------
     hybrid_scores = {}
 
-    for score, idx in zip(faiss_scores[0], faiss_indices[0]):
+    for score, idx in zip(norm_faiss_scores, faiss_indices[0]):
         hybrid_scores[idx] = alpha * float(score)
 
-    for idx in bm25_indices:
-        hybrid_scores[idx] = hybrid_scores.get(idx, 0) + (1 - alpha) * float(bm25_scores[idx])
+    for score, idx in zip(norm_bm25_scores, bm25_indices):
+        hybrid_scores[idx] = hybrid_scores.get(idx, 0) + (1 - alpha) * float(score)
 
     ranked = sorted(
         hybrid_scores.items(),
